@@ -58,6 +58,7 @@
             top: 0;
             background-color: var(--bg-color);
             z-index: 1000;
+            flex-wrap: wrap; /* Persiapan untuk seluler */
         }
 
         .logo img {
@@ -67,6 +68,11 @@
             transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             /* OPTIMASI: Rendering dengan GPU untuk mencegah lag */
             transform: translateZ(0); 
+        }
+
+        /* --- PENGATURAN DEFAULT TOMBOL MENU (DESKTOP) --- */
+        .mobile-toggle {
+            display: none; /* Sembunyikan tombol secara default di laptop/desktop */
         }
 
         nav {
@@ -312,34 +318,92 @@
             font-weight: bold;
         }
 
-        /* --- RESPONSIVE MOBILE UX --- */
+        /* --- RESPONSIVE MOBILE UX & TOGGLE MENU --- */
         @media (max-width: 768px) {
             header {
-                flex-direction: column;
-                gap: 1.2rem;
-                padding: 1.2rem 5%;
-            }
-            
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-            
-            /* OPTIMASI: Area sentuh yang lebih besar (min 44px) untuk jari agar tidak salah tekan */
-            nav a {
-                padding: 10px 12px; 
+                padding: 1rem 5%;
             }
 
-            .controls {
-                flex-wrap: wrap;
+            .logo {
+                flex: 1; /* Biarkan logo mengambil ruang kosong agar tombol menu terdorong ke kanan */
+            }
+
+            /* Tombol Toggle Tampil di Seluler */
+            .mobile-toggle {
+                display: flex;
+                align-items: center;
                 justify-content: center;
+                background-color: var(--accent-color);
+                border: 2px solid var(--border-color);
+                width: 44px;
+                height: 44px;
+                cursor: pointer;
+                z-index: 1001;
+                transition: transform 0.2s ease, background-color 0.2s;
+            }
+
+            /* Ikon Chevron Mengarah ke Bawah */
+            .chevron {
+                display: block;
+                width: 12px;
+                height: 12px;
+                border-right: 3px solid #ffffff;
+                border-bottom: 3px solid #ffffff;
+                transform: translateY(-3px) rotate(45deg);
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            /* Menu Navigasi Disembunyikan (Ditarik ke Atas) */
+            #navLinks {
+                position: absolute;
+                top: 100%;
+                left: 0;
                 width: 100%;
-                gap: 0.8rem;
+                background-color: var(--bg-color);
+                flex-direction: column;
+                gap: 0;
+                overflow: hidden;
+                max-height: 0; 
+                opacity: 0;
+                border-bottom: 0px solid var(--border-color);
+                transition: max-height 0.4s ease-out, opacity 0.3s ease, border-bottom 0.3s ease;
+                z-index: 1000;
+            }
+
+            #navLinks a {
+                padding: 1.2rem 5%;
+                border-bottom: 1px dashed var(--border-color);
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Kondisi Aktif Saat Menu Terbuka */
+            #navLinks.active {
+                max-height: 400px; 
+                opacity: 1;
+                border-bottom: 3px solid var(--border-color);
+            }
+
+            /* Chevron Memutar ke Atas Saat Aktif */
+            .mobile-toggle.active .chevron {
+                transform: translateY(3px) rotate(225deg);
+            }
+
+            /* Umpan balik taktil saat tombol menu ditekan */
+            .mobile-toggle:active { transform: translateY(2px); }
+            .mobile-toggle.active:active { transform: translateY(-2px); }
+
+            /* Penataan tombol controls (Blog, Bahasa, Tema) di bawah logo & menu */
+            .controls {
+                width: 100%;
+                margin-top: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                order: 3;
             }
 
             .controls button, .blog-btn {
-                padding: 12px 16px; /* Target sentuh yang nyaman */
+                padding: 12px 16px; /* Area sentuh luas */
                 flex-grow: 1;
                 text-align: center;
                 font-size: 1rem;
@@ -357,12 +421,18 @@
         <div class="logo">
             <img src="anakganteng.webp" alt="Logo Jurnalistik SMAN 1 Meliau" loading="lazy" width="200" height="50">
         </div>
-        <nav>
+
+        <button class="mobile-toggle" id="mobileToggle" aria-expanded="false" aria-label="Buka Menu">
+            <span class="chevron"></span>
+        </button>
+
+        <nav id="navLinks">
             <a href="#intro" class="lang" data-id="Pengantar" data-en="Intro">Pengantar</a>
             <a href="#program" class="lang" data-id="Program" data-en="Programs">Program</a>
             <a href="#proyek" class="lang" data-id="Proyek" data-en="Projects">Proyek</a>
             <a href="#contact" class="lang" data-id="Kontak" data-en="Contact">Kontak</a>
         </nav>
+        
         <div class="controls">
             <a href="https://marenpost.blogspot.com/" target="_blank" rel="noopener noreferrer" class="blog-btn lang" data-id="Baca Blog Marenpost" data-en="Read Marenpost Blog">Baca Blog Marenpost</a>
             <button id="langToggle">EN</button>
@@ -477,6 +547,32 @@
                     el.innerHTML = el.getAttribute('data-en');
                 } else {
                     el.innerHTML = el.getAttribute('data-id');
+                }
+            });
+        });
+
+        // --- MOBILE MENU TOGGLE SCRIPT ---
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileToggle.addEventListener('click', () => {
+            // Menambah/menghapus kelas 'active' pada tombol dan menu
+            mobileToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            
+            // Memperbarui atribut aksesibilitas
+            const isOpen = navLinks.classList.contains('active');
+            mobileToggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        // Menutup menu secara otomatis saat salah satu link navigasi ditekan
+        const menuItems = navLinks.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mobileToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
                 }
             });
         });

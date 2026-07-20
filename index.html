@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Jurnalistik SMAN 1 Meliau | Website Non-Resmi</title>
-    <!-- yang baca idiot dan gak ada kerjaan tiba-tiba inspect -->
+    <!-- Halo yang membuka inspect... tolong jgn hack aku. NVM kau idiot juga seperti ku!-->
+    
     <link rel="icon" type="image/webp" href="anakganteng.webp">
+    
+    <link rel="preconnect" href="https://images.unsplash.com">
     
     <style>
         :root {
@@ -132,6 +134,34 @@
             display: inline-block;
         }
 
+        /* FLOATING BUTTON (ABOUT US) */
+        .about-floating-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-accent);
+            font-weight: bold;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color);
+            z-index: 2000;
+            transition: all 0.2s ease;
+        }
+
+        .about-floating-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px var(--border-color);
+        }
+
         @media (hover: hover) and (pointer: fine) {
             nav a:hover { color: var(--accent-color); }
             .controls button:hover { background: var(--text-color); color: var(--bg-color); }
@@ -144,6 +174,10 @@
             .value-card:hover, .project-card:hover { transform: translate(-4px, -4px); }
             .value-card:hover { box-shadow: 12px 12px 0px var(--accent-color); }
             .project-card:hover { box-shadow: 12px 12px 0px var(--border-color); }
+            .about-floating-btn:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px var(--border-color);
+            }
         }
 
         /* --- SECTIONS --- */
@@ -171,13 +205,13 @@
             color: #ffffff !important; 
             border-style: dashed; 
             box-shadow: 8px 8px 0px var(--border-color); 
-            cursor: pointer; /* Indikasi bisa diklik */
+            cursor: pointer;
         }
         .project-card .article-tag, .project-card p { color: #ffffff !important; }
 
         /* --- MODAL / POP-UP STYLE --- */
         .modal-overlay {
-            display: none; /* Sembunyi secara default */
+            display: none; 
             position: fixed;
             top: 0;
             left: 0;
@@ -193,9 +227,9 @@
         .modal-content {
             background-color: var(--card-bg);
             border: 4px solid var(--border-color);
-            padding: 10px;
+            padding: 15px;
             width: 90%;
-            max-width: 450px; /* Tidak terlalu menutupi layar */
+            max-width: 450px; 
             position: relative;
             box-shadow: 15px 15px 0px var(--accent-color);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -256,7 +290,7 @@
                 position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-color);
                 flex-direction: column; max-height: 0; opacity: 0; overflow: hidden; transition: 0.4s;
             }
-            #navLinks.active { max-height: 400px; opacity: 1; border-bottom: 3px solid var(--border-color); }
+            #navLinks.active { max-height: 550px; opacity: 1; border-bottom: 3px solid var(--border-color); }
             .mobile-toggle.active .chevron { transform: translateY(2px) rotate(225deg); }
             .controls { width: 100%; margin-top: 1rem; justify-content: center; }
             .close-modal { top: -10px; right: -10px; }
@@ -279,6 +313,7 @@
             <a href="#intro" class="lang" data-id="Pengantar" data-en="Intro">Pengantar</a>
             <a href="#program" class="lang" data-id="Program" data-en="Programs">Program</a>
             <a href="#proyek" class="lang" data-id="Proyek" data-en="Projects">Proyek</a>
+            <a href="https://drive.google.com/drive/folders/1rF7wJP92_-qSxzWWnSh2rqd2fG46S0JO?usp=sharing" target="_blank" rel="noopener noreferrer" class="lang" data-id="Arsip" data-en="Archive">Arsip</a>
             <a href="#contact" class="lang" data-id="Kontak" data-en="Contact">Kontak</a>
         </nav>
         
@@ -289,14 +324,30 @@
         </div>
     </header>
 
+    <button class="about-floating-btn" id="openAboutModal" aria-label="About Us">i</button>
+
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <button class="close-modal" id="closeModal">&times;</button>
             <img id="targetGif" 
                  src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif" 
                  data-id-src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueXF4Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKVUn7iM8FMEU24/giphy.gif"
-                 data-en-src="fish.gif"
+                 data-en-src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzhueXF4Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4ZzR6Z3Rsc3Z4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lTfuxD9QJ2f8gE/giphy.gif"
                  alt="Tugas Akhir Anggota">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="aboutModalOverlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <button class="close-modal" id="closeAboutModal">&times;</button>
+            <div style="padding: 10px; font-family: var(--font-accent); font-weight: bold; text-align: left;">
+                <h3 style="color: var(--accent-color); margin-bottom: 10px; text-transform: uppercase;">ABOUT US</h3>
+                <p class="lang" 
+                   data-id="Website yang tidak resmi, dan dibuat oleh orang idiot, tolol, dan tidak punya kerjaan. Jadi, jika kalian melihat ini lalu mikir 'Kok kasar bgt bahasanya?' aku tidak peduli." 
+                   data-en="An unofficial website, made by an idiot, fool, with no job. So, if you see this and think 'Why is the language so harsh?' I don't care.">
+                   Website yang tidak resmi, dan dibuat oleh orang idiot, tolol, dan tidak punya kerjaan. Jadi, jika kalian melihat ini lalu mikir 'Kok kasar bgt bahasanya?' aku tidak peduli.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -347,7 +398,7 @@
             <div class="article-card project-card" id="openModal">
                 <div class="article-content">
                     <span class="article-tag lang" data-id="Tugas Akhir Anggota" data-en="Members Final Task">Tugas Akhir Anggota</span>
-                    <h3 class="article-title lang" data-id="Tugas Terakhir" data-en="Final Task">Tugas Terakhir</h3>
+                    <h3 class="article-title lang" data-id="Klik untuk Detail" data-en="Click for Details">Tugas Akhir</h3>
                     <p class="lang" data-id="Jadi diri sendiri. Dan tertawa." data-en="Just be yourself. And laugh.">Jadi diri sendiri. Dan tertawa.</p>
                 </div>
             </div>
@@ -374,23 +425,23 @@
 
         // --- LANGUAGE TOGGLE & GIF SWITCHER ---
         const langBtn = document.getElementById('langToggle');
-        const gifImage = document.getElementById('targetGif'); // Mengambil elemen gambar GIF
+        const gifImage = document.getElementById('targetGif'); 
         let currentLang = 'id';
         
         langBtn.addEventListener('click', () => {
             currentLang = currentLang === 'id' ? 'en' : 'id';
             langBtn.innerText = currentLang === 'id' ? 'EN' : 'ID';
             
-            // Mengubah teks berdasarkan bahasa
             document.querySelectorAll('.lang').forEach(el => {
                 el.innerHTML = el.getAttribute(`data-${currentLang}`);
             });
             
-            // Mengubah GIF berdasarkan bahasa
-            if (currentLang === 'id') {
-                gifImage.src = gifImage.getAttribute('data-id-src');
-            } else {
-                gifImage.src = gifImage.getAttribute('data-en-src');
+            if (gifImage) {
+                if (currentLang === 'id') {
+                    gifImage.src = gifImage.getAttribute('data-id-src');
+                } else {
+                    gifImage.src = gifImage.getAttribute('data-en-src');
+                }
             }
         });
 
@@ -402,25 +453,54 @@
             navLinks.classList.toggle('active');
         });
 
-        // --- MODAL POP-UP LOGIC ---
+        const menuItems = navLinks.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    mobileToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // --- LOGIKA MODAL PROYEK ---
         const modal = document.getElementById('modalOverlay');
         const openBtn = document.getElementById('openModal');
         const closeBtn = document.getElementById('closeModal');
 
         openBtn.addEventListener('click', () => {
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Kunci scroll saat pop-up buka
+            document.body.style.overflow = 'hidden'; 
         });
 
         closeBtn.addEventListener('click', () => {
             modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Aktifkan scroll lagi
+            document.body.style.overflow = 'auto'; 
         });
 
-        // Tutup modal jika user klik area luar kotak
+        // --- LOGIKA MODAL ABOUT US ---
+        const aboutModal = document.getElementById('aboutModalOverlay');
+        const openAboutBtn = document.getElementById('openAboutModal');
+        const closeAboutBtn = document.getElementById('closeAboutModal');
+
+        openAboutBtn.addEventListener('click', () => {
+            aboutModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeAboutBtn.addEventListener('click', () => {
+            aboutModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Tutup modal jika user klik area luar kotak modal mana pun
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (e.target === aboutModal) {
+                aboutModal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         });
